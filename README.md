@@ -37,10 +37,17 @@ npm install
 PORT=3000
 REDIS_URL=redis://localhost:6379
 WEATHER_API_KEY=<your-api-key>
+WEATHER_API_URL=YOUR_WEATHER_API_URL_HERE
+REDIS_TTL_SECONDS=43200
 ```
 4. Run in development:
 ```bash
 npm run dev
+```
+5. Prepare Husky hooks:
+- This installs Husky hooks locally. After that, pre-commit hooks will run automatically on every commit.
+```bash
+npm run prepare
 ```
 
 ## Linting & Formatting
@@ -59,3 +66,8 @@ npm run lint:fix
 ```bash
 npm run format
 ```
+
+### Pre-commit Hooks (Husky + lint-staged)
+- Before every commit, `lint-staged` runs ESLint and Prettier on all staged files.
+- Commits will fail if there are linting errors or warnings.
+- Staged files are automatically fixed where possible.
