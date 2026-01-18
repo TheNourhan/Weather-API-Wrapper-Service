@@ -1,11 +1,11 @@
 {
   "name": "weather-api-wrapper-service",
   "version": "1.0.0",
-  "description": "- Client calls our API - Our API:     1. checks Redis cache     2. if data exists → return it     3. else → call external Weather API     4. save response in cache (with expiration)     5. return response to client",
+  "description": "A simple Node.js/Express API wrapper for any external weather service. It caches weather data in Redis to reduce API calls and improve response times.",
   "main": "index.js",
   "scripts": {
     "start": "node dist/index.js",
-    "dev": "nodemon --watch 'src/**/*.ts' --exec 'ts-node' src/index.ts",
+    "dev": "nodemon --watch src --exec tsx src/index.ts",
     "build": "tsc",
     "lint": "eslint 'src/**/*.{ts,js}'",
     "lint:fix": "eslint 'src/**/*.{ts,js}' --fix",
@@ -42,6 +42,7 @@
     "nodemon": "^3.1.11",
     "prettier": "^3.8.0",
     "ts-node": "^10.9.2",
+    "tsx": "^4.21.0",
     "typescript": "^5.9.3",
     "typescript-eslint": "^8.53.0"
   }
