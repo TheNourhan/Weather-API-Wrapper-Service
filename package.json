@@ -9,7 +9,8 @@
     "build": "tsc",
     "lint": "eslint 'src/**/*.{ts,js}'",
     "lint:fix": "eslint 'src/**/*.{ts,js}' --fix",
-    "format": "prettier --write 'src/**/*.{ts,js,json,md}'"
+    "format": "prettier --write 'src/**/*.{ts,js,json,md}'",
+    "prepare": "husky install"
   },
   "repository": {
     "type": "git",
@@ -39,11 +40,19 @@
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-prettier": "^5.5.5",
     "globals": "^17.0.0",
+    "husky": "^8.0.0",
+    "lint-staged": "^16.2.7",
     "nodemon": "^3.1.11",
     "prettier": "^3.8.0",
     "ts-node": "^10.9.2",
     "tsx": "^4.21.0",
     "typescript": "^5.9.3",
     "typescript-eslint": "^8.53.0"
+  },
+  "lint-staged": {
+    "src/**/*.{ts,js}": [
+      "eslint --max-warnings=0 --fix",
+      "prettier --write"
+    ]
   }
 }
