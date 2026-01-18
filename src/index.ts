@@ -1,13 +1,15 @@
-import express from "express";
 import dotenv from "dotenv";
-import { getRedisClient } from "./cache/redis.client.js";
-
 dotenv.config();
+
+import express from "express";
+import { getRedisClient } from "./cache/redis.client.js";
+import weatherRouter from "./routes/weather.route.js";
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
+app.use(weatherRouter);
 
 async function startServer() {
   // Connect to Redis
@@ -23,24 +25,19 @@ async function startServer() {
   });
 
   // Graceful (Docker/K8s/shutdown)
-  process.on("SIGTERM", async () => {
-    console.log("\nSIGTERM received. Shutting down...");
+  function shutdownHandler(signal: string) {
+    return async () => {
+      console.log(`\n\n${signal} received. Shutting down...`);
+      server.close(async () => {
+        await redis.quit();
+        console.log("Redis disconnected. Server closed.");
+        process.exit(0);
+      });
+    };
+  }
 
-    server.close(async () => {
-      await redis.quit();
-      console.log("Redis disconnected. Server closed.");
-      process.exit(0);
-    });
-  });
-
-  process.on("SIGINT", async () => {
-    console.log("\n\nSIGINT received (Ctrl+C). Shutting down...");
-
-    server.close(async () => {
-      await redis.quit();
-      process.exit(0);
-    });
-  });
+  process.on("SIGINT", shutdownHandler("SIGINT"));
+  process.on("SIGTERM", shutdownHandler("SIGTERM"));
 }
 
 startServer().catch((err) => {

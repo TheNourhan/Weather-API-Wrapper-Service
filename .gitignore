@@ -22,3 +22,6 @@ Thumbs.db
 
 # Redis dump (if you ever store locally)
 dump.rdb
+
+*.http
+
