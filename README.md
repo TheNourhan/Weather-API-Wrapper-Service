@@ -71,3 +71,21 @@ npm run format
 - Before every commit, `lint-staged` runs ESLint and Prettier on all staged files.
 - Commits will fail if there are linting errors or warnings.
 - Staged files are automatically fixed where possible.
+
+## Dependency Graph
+This is the dependency graph, a visual representation of the project's file dependencies. It shows how the files in the project depend on each other, rather than the dependencies in `node_modules`. This can be helpful for understanding the structure and relationships within the project.
+<p align="center">
+  <img src="assets/graph.png" alt="Weather API Logo" />
+</p>
+
+### Generate or Update the Graph
+This project uses [Madge](https://www.npmjs.com/package/madge) to generate dependency graphs.
+1. Install dependencies: 
+```bash
+sudo apt install graphviz # Required for visual graphs
+```
+2. Run the script to generate the graph:
+```bash
+npm run dep-graph
+```
+3. The graph will be saved as graph.png in the project root.

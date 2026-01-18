@@ -10,7 +10,9 @@
     "lint": "eslint 'src/**/*.{ts,js}'",
     "lint:fix": "eslint 'src/**/*.{ts,js}' --fix",
     "format": "prettier --write 'src/**/*.{ts,js,json,md}'",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "dep-graph": "madge --image graph.png src --extensions ts,js",
+    "dep-graph-circular": "madge --circular --image circular.png src --extensions ts,js"
   },
   "repository": {
     "type": "git",
@@ -42,6 +44,7 @@
     "globals": "^17.0.0",
     "husky": "^8.0.0",
     "lint-staged": "^16.2.7",
+    "madge": "^8.0.0",
     "nodemon": "^3.1.11",
     "prettier": "^3.8.0",
     "ts-node": "^10.9.2",
