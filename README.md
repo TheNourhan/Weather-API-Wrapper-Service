@@ -3,6 +3,20 @@
 A simple Node.js/Express API wrapper for any external weather service. 
 It caches weather data in Redis to reduce API calls and improve response times.
 
+## Table of Contents
+
+- [High Level System Overview](#high-level-system-overview)
+- [Tech Stack](#tech-stack)
+- [Installation](#installation)
+- [Linting & Formatting](#linting--formatting)
+  - [Pre-commit Hooks (Husky + lint-staged)](#pre-commit-hooks-husky--lint-staged)
+- [Dependency Graph](#dependency-graph)
+- [Contributing](#contributing)
+  - [Commit Message Convention](#commit-message-convention)
+  - [Code Quality](#code-quality)
+  - [Development Workflow](#development-workflow)
+
+
 ## High Level System Overview
 <p align="center">
   <img src="assets/System-Overview-Weather-API-Wrapper-Service.png" alt="Weather API Logo" />
