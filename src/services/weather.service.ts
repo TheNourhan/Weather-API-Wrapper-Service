@@ -1,6 +1,8 @@
 import { getCache, setCache } from "../cache/cache.service.js";
 import type { WeatherData, VisualCrossingResponse } from "../types/weather.js";
 import { WEATHER_API_KEY, WEATHER_API_URL } from "../config/weather.js";
+import AppError from "../utils/appError.js";
+import { httpStatusText } from "../utils/httpStatusText.js";
 
 export async function getWeather(city: string): Promise<WeatherData> {
   const cacheKey = `weather:${city.toLowerCase()}`;
@@ -16,7 +18,11 @@ export async function getWeather(city: string): Promise<WeatherData> {
   const response = await fetch(url);
 
   if (!response.ok) {
-    throw new Error(`Weather API error: ${response.statusText}`);
+    throw new AppError(
+      `Weather API error: ${response.statusText}`,
+      response.status,
+      httpStatusText.FAIL,
+    );
   }
 
   const data: VisualCrossingResponse = await response.json();
@@ -24,8 +30,13 @@ export async function getWeather(city: string): Promise<WeatherData> {
   // Map API response to our internal type
   const today = data.days[0];
   if (!today) {
-    throw new Error(`Weather data not available for city: ${city}`);
+    throw new AppError(
+      `Weather data not available for city: ${city}`,
+      404,
+      httpStatusText.FAIL,
+    );
   }
+
   const weather: WeatherData = {
     temp: today.temp,
     humidity: today.humidity,
