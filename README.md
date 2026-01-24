@@ -89,3 +89,51 @@ sudo apt install graphviz # Required for visual graphs
 npm run dep-graph
 ```
 3. The graph will be saved as graph.png in the project root.
+
+## Contributing
+Thank you for considering contributing to this project!
+
+#### Commit Message Convention
+This project follows a simple and consistent commit message convention
+to keep the Git history clean, readable, and easy to navigate.
+
+#### Format:
+`<type>: <short description>`
+
+#### Commit Types:
+- **feat**: A new feature  
+  Example: `feat: add weather caching with Redis`
+
+- **fix**: A bug fix  
+  Example: `fix: handle missing city parameter`
+
+- **docs**: Documentation only changes  
+  Example: `docs: update README installation steps`
+
+- **refactor**: Code changes that neither fix a bug nor add a feature  
+  Example: `refactor: extract weather controller`
+
+- **cleanup**: Removing unused code, formatting, or minor improvements  
+  Example: `cleanup: remove unused imports`
+
+- **style**: Code style changes (spacing, formatting, no logic changes)  
+  Example: `style: format weather service`
+
+- **test**: Adding or updating tests  
+  Example: `test: add unit tests for weather service`
+
+- **chore**: Tooling, config, or dependency updates  
+  Example: `chore: configure husky and lint-staged`
+
+#### Notes
+- Use **present tense** (“add”, not “added”)
+- Keep messages **short and clear**
+- One commit = one logical change
+
+### Code Quality
+- ESLint and Prettier are enforced via pre-commit hooks
+- Commits will fail if linting errors exist
+
+### Development Workflow
+- Create a feature branch
+- Open a pull request to `main`
