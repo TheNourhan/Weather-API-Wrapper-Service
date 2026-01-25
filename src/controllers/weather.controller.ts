@@ -1,7 +1,8 @@
-import type { Request, Response } from "express";
-import { getWeather } from "../services/weather.service.js";
+import type { NextFunction, Request, Response } from "express";
+import { getWeather, getTimelineWeather } from "../services/weather.service.js";
 import { httpStatusText } from "../utils/httpStatusText.js";
 import AppError from "../utils/appError.js";
+import { normalizeParam } from "../utils/normalizeParam.js";
 
 export async function getWeatherController(req: Request, res: Response) {
   const city = req.params.city as string;
@@ -29,5 +30,34 @@ export async function getWeatherController(req: Request, res: Response) {
       status: httpStatusText.ERROR,
       message: "Internal Server Error",
     });
+  }
+}
+
+export async function getTimelineWeatherController(
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) {
+  try {
+    const { location: rawLocation, date1, date2 } = req.params;
+
+    if (!rawLocation || Array.isArray(rawLocation)) {
+      throw new AppError("Location is required", 400, httpStatusText.FAIL);
+    }
+
+    const location = rawLocation;
+
+    const weather = await getTimelineWeather({
+      location,
+      date1: normalizeParam(date1),
+      date2: normalizeParam(date2),
+    });
+
+    res.status(200).json({
+      status: httpStatusText.SUCCESS,
+      data: weather,
+    });
+  } catch (err) {
+    next(err);
   }
 }

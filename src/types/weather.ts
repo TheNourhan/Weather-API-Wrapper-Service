@@ -13,3 +13,9 @@ export interface VisualCrossingResponse {
   }>;
   resolvedAddress: string;
 }
+
+export type TimelineParams = {
+  location: string;
+  date1?: string | undefined;
+  date2?: string | undefined;
+};

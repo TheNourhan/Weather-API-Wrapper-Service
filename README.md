@@ -8,6 +8,9 @@ It caches weather data in Redis to reduce API calls and improve response times.
 - [High Level System Overview](#high-level-system-overview)
 - [Tech Stack](#tech-stack)
 - [Installation](#installation)
+- [Weather API Integration](#weather-api-integration)
+  - [How It Works in This Project](#how-it-works-in-this-project)
+  - [Example Request & Response](#example-request--response)
 - [Linting & Formatting](#linting--formatting)
   - [Pre-commit Hooks (Husky + lint-staged)](#pre-commit-hooks-husky--lint-staged)
 - [Dependency Graph](#dependency-graph)
@@ -62,6 +65,51 @@ npm run dev
 - This installs Husky hooks locally. After that, pre-commit hooks will run automatically on every commit.
 ```bash
 npm run prepare
+```
+
+## Weather API Integration
+This project uses the [Visual Crossing Weather API](https://www.visualcrossing.com/weather-api/) to fetch weather data for any location.
+
+### How It Works in This Project
+- The API is called through our Node.js/Express backend.
+
+- Requests are cached in Redis to reduce repeated API calls and improve performance.
+
+- **You can fetch**:
+
+  - Current weather or 15-day forecast: `GET /weather/:city`
+
+  - Timeline forecast for a location: <br>
+`GET /weather/timeline/:location` <br>
+`GET /weather/timeline/:location/:date1` <br>
+`GET /weather/timeline/:location/:date1/:date2`
+
+### Example Request & Response
+#### Request:
+```http
+GET http://localhost:3000/weather/timeline/saudi%20arabia/2024-10-19
+Content-Type: application/json
+```
+#### Response:
+```json
+{
+  "status": "success",
+  "data": {
+    "resolvedAddress": "Saudi Arabia",
+    "days": [
+      {
+        "datetime": "2024-10-19",
+        "temp": 29.9,
+        "tempmax": 37,
+        "tempmin": 23,
+        "humidity": 19,
+        "conditions": "Clear",
+        "description": "Clear conditions throughout the day."
+      }
+    ],
+    "source": "cache"
+  }
+}
 ```
 
 ## Linting & Formatting
