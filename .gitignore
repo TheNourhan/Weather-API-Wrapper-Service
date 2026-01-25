@@ -25,3 +25,8 @@ dump.rdb
 
 *.http
 
+# Coverage directory used by tools like Jest
+coverage/
+*.lcov
+.nyc_output/
+

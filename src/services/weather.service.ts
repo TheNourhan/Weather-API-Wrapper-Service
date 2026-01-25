@@ -8,7 +8,9 @@ import { WEATHER_API_KEY, WEATHER_API_URL } from "../config/weather.js";
 import AppError from "../utils/appError.js";
 import { httpStatusText } from "../utils/httpStatusText.js";
 
-export async function getWeather(city: string): Promise<WeatherData> {
+export async function getWeather(
+  city: string,
+): Promise<WeatherData & { source: string }> {
   const cacheKey = `weather:${city.toLowerCase()}`;
 
   // Check cache first
@@ -79,8 +81,6 @@ export async function getTimelineWeather({
   if (date1) url += `/${date1}`;
   if (date2) url += `/${date2}`;
   url += `?unitGroup=metric&key=${WEATHER_API_KEY}&include=days`;
-
-  console.log("Timeline URL:", url);
 
   // Fetch data
   const response = await fetch(url);

@@ -1,30 +1,21 @@
 import dotenv from "dotenv";
 dotenv.config();
 
-import express from "express";
 import { getRedisClient } from "./cache/redis.client.js";
-import weatherRouter from "./routes/weather.route.js";
+import app from "./app.js";
 
-const app = express();
 const PORT = process.env.PORT || 3000;
-
-app.use(express.json());
-app.use(weatherRouter);
 
 async function startServer() {
   // Connect to Redis
   const redis = getRedisClient();
   await redis.connect();
 
-  app.get("/", (req, res) => {
-    res.send("Weather API Wrapper is running!");
-  });
-
   const server = app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
   });
 
-  // Graceful (Docker/K8s/shutdown)
+  // Graceful shutdown (Docker/K8s/shutdown)
   function shutdownHandler(signal: string) {
     return async () => {
       console.log(`\n\n${signal} received. Shutting down...`);
@@ -40,7 +31,12 @@ async function startServer() {
   process.on("SIGTERM", shutdownHandler("SIGTERM"));
 }
 
-startServer().catch((err) => {
-  console.error("Failed to start server:", err);
-  process.exit(1);
-});
+// Only start server if not in test environment
+if (process.env.NODE_ENV !== "test") {
+  startServer().catch((err) => {
+    console.error("Failed to start server:", err);
+    process.exit(1);
+  });
+}
+
+export default app;

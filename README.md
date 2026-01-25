@@ -11,6 +11,7 @@ It caches weather data in Redis to reduce API calls and improve response times.
 - [Weather API Integration](#weather-api-integration)
   - [How It Works in This Project](#how-it-works-in-this-project)
   - [Example Request & Response](#example-request--response)
+- [Testing](#testing)
 - [Linting & Formatting](#linting--formatting)
   - [Pre-commit Hooks (Husky + lint-staged)](#pre-commit-hooks-husky--lint-staged)
 - [Dependency Graph](#dependency-graph)
@@ -20,7 +21,7 @@ It caches weather data in Redis to reduce API calls and improve response times.
   - [Development Workflow](#development-workflow)
 
 
-## High Level System Overview
+## High-Level System Overview
 <p align="center">
   <img src="assets/System-Overview-Weather-API-Wrapper-Service.png" alt="Weather API Logo" />
 </p>
@@ -112,6 +113,23 @@ Content-Type: application/json
 }
 ```
 
+## Testing
+This project uses **Jest** for unit and integration testing, along with **Supertest** for HTTP API testing.
+
+### Run Tests
+- Run all tests with coverage:
+```
+npm test
+```
+- Run in watch mode:
+```
+npm run test:watch
+```
+- Debug tests
+```
+npm run test:debug
+```
+
 ## Linting & Formatting
 This project uses **ESLint** and **Prettier** to ensure code quality and consistent formatting.
 ### Run ESLint
@@ -135,7 +153,7 @@ npm run format
 - Staged files are automatically fixed where possible.
 
 ## Dependency Graph
-This is the dependency graph, a visual representation of the project's file dependencies. It shows how the files in the project depend on each other, rather than the dependencies in `node_modules`. This can be helpful for understanding the structure and relationships within the project.
+This is the dependency graph, a visual representation of the project's file dependencies. It shows how the files in the project depend on each other, rather than the dependencies in `node_modules`. This can help understand the structure and relationships within the project.
 <p align="center">
   <img src="assets/graph.png" alt="Weather API Logo" />
 </p>
