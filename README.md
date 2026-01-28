@@ -8,9 +8,9 @@ It caches weather data in Redis to reduce API calls and improve response times.
 - [High Level System Overview](#high-level-system-overview)
 - [Tech Stack](#tech-stack)
 - [Installation](#installation)
-- [Weather API Integration](#weather-api-integration)
-  - [How It Works in This Project](#how-it-works-in-this-project)
-  - [Example Request & Response](#example-request--response)
+- [API Documentation](#api-documentation)
+  - [Interactive Documentation](#interactive-documentation)
+  - [Weather API Integration](#weather-api-integration)
 - [Testing](#testing)
 - [Linting & Formatting](#linting--formatting)
   - [Pre-commit Hooks (Husky + lint-staged)](#pre-commit-hooks-husky--lint-staged)
@@ -39,6 +39,7 @@ It caches weather data in Redis to reduce API calls and improve response times.
 - Node.js (v22.20.0), NPM (11.7.0)
 - Express
 - Redis (in-memory cache)
+- Swagger/OpenAPI (API documentation)
 
 ## Installation
 1. Clone the repo:
@@ -68,7 +69,14 @@ npm run dev
 npm run prepare
 ```
 
-## Weather API Integration
+## API Documentation
+This project uses **Swagger/OpenAPI** for interactive API documentation.
+
+### Interactive Documentation
+- **Swagger UI**: Once the server is running, visit: http://localhost:3000/api-docs
+- **Features**: Try endpoints directly, see schemas, organized by categories
+
+### Weather API Integration
 This project uses the [Visual Crossing Weather API](https://www.visualcrossing.com/weather-api/) to fetch weather data for any location.
 
 ### How It Works in This Project
@@ -110,6 +118,15 @@ Content-Type: application/json
     ],
     "source": "cache"
   }
+}
+```
+
+### Response Format
+All endpoints return consistent JSON:
+```json
+{
+  "status": "success",  // or "fail", "error"
+  "data": { /* endpoint-specific data */ }
 }
 ```
 

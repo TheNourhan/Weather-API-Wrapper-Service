@@ -1,0 +1,365 @@
+# src/config/swagger.yaml
+openapi: 3.0.0
+info:
+  title: Weather API Wrapper Service
+  version: 1.0.0
+  description: Weather API with Redis caching. Data is cached for 1 hour.
+
+servers:
+  - url: http://localhost:3000
+    description: Development server
+
+tags:
+  - name: Weather
+    description: Get weather data for locations
+  - name: Cache
+    description: Manage Redis cache (debug/development)
+
+paths:
+  # ========== HEALTH CHECK ==========
+  /:
+    get:
+      summary: Health check
+      responses:
+        200:
+          description: API is running
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: "Weather API Wrapper is running!"
+
+  # ========== WEATHER ENDPOINTS ==========
+  /weather/timeline/{location}:
+    get:
+      tags: [Weather]
+      summary: Get 15-day weather forecast
+      description: Returns 15-day weather forecast for a location
+      parameters:
+        - name: location
+          in: path
+          required: true
+          schema:
+            type: string
+          example: london
+          description: City name (spaces encoded as %20)
+      responses:
+        200:
+          description: Weather data
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  data:
+                    type: object
+                    properties:
+                      resolvedAddress:
+                        type: string
+                      days:
+                        type: array
+                      source:
+                        type: string
+                        enum: [cache, api]
+                        description: cache = from Redis, api = from external API
+
+  /weather/timeline/{location}/{date1}:
+    get:
+      tags: [Weather]
+      summary: Get weather for specific date
+      description: Get weather for a single date (YYYY-MM-DD or Unix timestamp)
+      parameters:
+        - name: location
+          in: path
+          required: true
+          schema:
+            type: string
+          example: paris
+        - name: date1
+          in: path
+          required: true
+          schema:
+            type: string
+          example: 2024-10-19
+      responses:
+        200:
+          description: Weather data for the date
+
+  /weather/timeline/{location}/{date1}/{date2}:
+    get:
+      tags: [Weather]
+      summary: Get weather for date range
+      description: Get weather for a date range (YYYY-MM-DD or Unix timestamps)
+      parameters:
+        - name: location
+          in: path
+          required: true
+          schema:
+            type: string
+          example: tokyo
+        - name: date1
+          in: path
+          required: true
+          schema:
+            type: string
+          example: 2024-10-19
+        - name: date2
+          in: path
+          required: true
+          schema:
+            type: string
+          example: 2024-10-25
+      responses:
+        200:
+          description: Weather data for the date range
+
+  # ========== CACHE MANAGEMENT ENDPOINTS ==========
+  /api/cache/stats:
+    get:
+      tags: [Cache]
+      summary: Get cache statistics
+      responses:
+        200:
+          description: Cache stats
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  data:
+                    type: object
+                    properties:
+                      totalKeys:
+                        type: number
+                      weatherKeys:
+                        type: array
+                        items:
+                          type: string
+
+  /api/cache/keys/search:
+    get:
+      tags: [Cache]
+      summary: Search cache keys by pattern
+      parameters:
+        - name: pattern
+          in: query
+          required: false
+          schema:
+            type: string
+            default: "weather:*"
+          example: "weather:*london*"
+          description: Redis pattern with * wildcard
+      responses:
+        200:
+          description: Matching keys
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      pattern:
+                        type: string
+                      keys:
+                        type: array
+                        items:
+                          type: string
+                      count:
+                        type: number
+
+  /api/cache/{key}:
+    get:
+      tags: [Cache]
+      summary: Get full cache entry info
+      parameters:
+        - name: key
+          in: path
+          required: true
+          schema:
+            type: string
+          example: "weather:timeline:london:forecast"
+      responses:
+        200:
+          description: Cache entry details
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      key:
+                        type: string
+                      exists:
+                        type: boolean
+                      value:
+                        type: object
+                      ttl:
+                        type: number
+                      size:
+                        type: number
+
+    delete:
+      tags: [Cache]
+      summary: Delete cache key
+      parameters:
+        - name: key
+          in: path
+          required: true
+          schema:
+            type: string
+          example: "weather:timeline:london:forecast"
+      responses:
+        200:
+          description: Deletion result
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      deleted:
+                        type: boolean
+                      key:
+                        type: string
+                      message:
+                        type: string
+
+  /api/cache/{key}/exists:
+    get:
+      tags: [Cache]
+      summary: Check if key exists
+      parameters:
+        - name: key
+          in: path
+          required: true
+          schema:
+            type: string
+          example: "weather:timeline:london:forecast"
+      responses:
+        200:
+          description: Existence check
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      exists:
+                        type: boolean
+                      key:
+                        type: string
+
+  /api/cache/{key}/ttl:
+    get:
+      tags: [Cache]
+      summary: Get TTL for cache key
+      parameters:
+        - name: key
+          in: path
+          required: true
+          schema:
+            type: string
+          example: "weather:timeline:london:forecast"
+      responses:
+        200:
+          description: TTL information
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      key:
+                        type: string
+                      ttl:
+                        type: number
+                      status:
+                        type: string
+                        enum: [active, expired, no-expiry, not-found]
+                      humanReadable:
+                        type: string
+                        example: "11h 53m 57s"
+
+    put:
+      tags: [Cache]
+      summary: Update TTL for cache key
+      parameters:
+        - name: key
+          in: path
+          required: true
+          schema:
+            type: string
+          example: "weather:timeline:london:forecast"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [ttl]
+              properties:
+                ttl:
+                  type: number
+                  minimum: 1
+                  example: 3600
+                  description: New TTL in seconds
+      responses:
+        200:
+          description: TTL updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      updated:
+                        type: boolean
+                      key:
+                        type: string
+                      newTTL:
+                        type: number
+                      message:
+                        type: string
+
+# ========== RESPONSE FORMAT ==========
+components:
+  schemas:
+    SuccessResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          example: success
+        data:
+          type: object
+          description: Response data
