@@ -63,13 +63,18 @@ export async function getTimelineWeather({
 }: TimelineParams) {
   const normalizedLocation = location.toLowerCase();
 
-  const cacheKey = [
+  const cacheKeyParts = [
     "weather",
     "timeline",
     normalizedLocation,
     date1 ?? "forecast",
-    date2 ?? "",
-  ].join(":");
+    date2, // Don't provide default value here
+  ];
+
+  // Filter out falsy values (undefined, null, empty string)
+  const cacheKey = cacheKeyParts
+    .filter((part) => part && part.trim() !== "")
+    .join(":");
 
   const cached = await getCache<VisualCrossingResponse>(cacheKey);
   if (cached) {
