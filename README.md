@@ -8,6 +8,8 @@ It caches weather data in Redis to reduce API calls and improve response times.
 - [High Level System Overview](#high-level-system-overview)
 - [Tech Stack](#tech-stack)
 - [Installation](#installation)
+  - [Manual Installation](#manual-installation)
+  - [Docker Installation](#docker-installation)
 - [API Documentation](#api-documentation)
   - [Interactive Documentation](#interactive-documentation)
   - [Weather API Integration](#weather-api-integration)
@@ -42,32 +44,66 @@ It caches weather data in Redis to reduce API calls and improve response times.
 - Swagger/OpenAPI (API documentation)
 
 ## Installation
-1. Clone the repo:
+-  Clone the repo:
 ```bash
 git clone https://github.com/TheNourhan/Weather-API-Wrapper-Service.git
 cd Weather-API-Wrapper-Service
 ```
-2. Install dependencies:
+- Set up environment variables:
+```bash
+cp .env.sample .env
+```
+Edit the `.env` file and add your API key (see [.env.sample](https://github.com/TheNourhan/Weather-API-Wrapper-Service/blob/main/.env.sample) for all required variables).
+### Manual Installation
+
+1. Install dependencies:
 ```bash
 npm install
 ```
-3. Create a .env file:
-```bash
-PORT=3000
-REDIS_URL=redis://localhost:6379
-WEATHER_API_KEY=<your-api-key>
-WEATHER_API_URL=YOUR_WEATHER_API_URL_HERE
-REDIS_TTL_SECONDS=43200
-```
-4. Run in development:
+
+2. Run in development:
 ```bash
 npm run dev
 ```
-5. Prepare Husky hooks:
+3. Prepare Husky hooks:
 - This installs Husky hooks locally. After that, pre-commit hooks will run automatically on every commit.
 ```bash
 npm run prepare
 ```
+### Docker Installation
+This project is fully Dockerized for easy development and deployment.
+### Prerequisites
+- [Docker](https://docs.docker.com/get-docker/) v29.2.0
+- [Docker Compose](https://docs.docker.com/compose/install/) v1.29.2
+
+### Quick Start
+- Start the services:
+```bash
+ docker-compose up
+```
+
+### Useful Commands
+```bash
+# Start in detached mode
+docker-compose up -d
+
+# View logs
+docker-compose logs -f
+
+# Stop services
+docker-compose down
+
+# Rebuild and start
+docker-compose up --build
+
+# Run tests
+docker-compose exec app npm test
+
+# Access Redis CLI
+docker-compose exec redis redis-cli
+```
+### Hot Reload
+Source code changes in the src/ directory are automatically reflected - no need to restart!
 
 ## API Documentation
 This project uses **Swagger/OpenAPI** for interactive API documentation.
@@ -85,9 +121,6 @@ This project uses the [Visual Crossing Weather API](https://www.visualcrossing.c
 - Requests are cached in Redis to reduce repeated API calls and improve performance.
 
 - **You can fetch**:
-
-  - Current weather or 15-day forecast: `GET /weather/:city`
-
   - Timeline forecast for a location: <br>
 `GET /weather/timeline/:location` <br>
 `GET /weather/timeline/:location/:date1` <br>

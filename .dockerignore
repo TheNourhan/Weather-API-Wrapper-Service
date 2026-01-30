@@ -1,0 +1,23 @@
+# .dockerignore
+node_modules
+npm-debug.log
+dist
+coverage
+.git
+.github
+.husky
+.vscode
+.idea
+*.md
+*.log
+.env
+.env.local
+.DS_Store
+docker-compose.override.yml
+TODO
+assets/
+__tests__/
+
+.gitignore
+.env.*.local
+build
