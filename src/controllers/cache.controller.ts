@@ -6,9 +6,10 @@ import { httpStatusText } from "../utils/httpStatusText.js";
 // Helper function to extract and validate key from params
 function getKeyFromParams(params: any): string {
   const key = params.key;
-  if (!key || typeof key !== "string") {
+  // Check if key exists and is a non-empty string (trim whitespace)
+  if (!key || typeof key !== "string" || key.trim() === "") {
     throw new AppError(
-      "Cache key is required and must be a string",
+      "Cache key is required and must be a non-empty string",
       400,
       httpStatusText.FAIL,
     );

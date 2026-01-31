@@ -5,7 +5,15 @@ import type { CacheKey } from "../types/cache.js";
 export async function getCache<T>(key: CacheKey): Promise<T | null> {
   const redis = getRedisClient();
   const data = await redis.get(key);
-  return data ? JSON.parse(data) : null;
+
+  if (!data) return null;
+
+  try {
+    return JSON.parse(data) as T;
+  } catch {
+    // If JSON is invalid, return null (cache miss)
+    return null;
+  }
 }
 
 export async function setCache<T>(
