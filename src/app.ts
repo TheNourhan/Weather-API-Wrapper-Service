@@ -40,7 +40,8 @@ app.use((req, res, next) => {
 });
 
 // Global error handler
-app.use((error: any, req: any, res: any) => {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+app.use((error: any, req: any, res: any, next: any) => {
   error.statusCode = error.statusCode || 500;
   error.statusText = error.statusText || httpStatusText.ERROR;
 
